@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bruno OAuth2 Redirect</title>
+    <script>
+      (function() {
+        var url = 'bruno://app/oauth2/callback';
+        url += window.location.search || '';
+        url += window.location.hash || '';
+        window.open(url);
+      })();
+    </script>
+  </head>
+  <body>
+    Redirecting to Bruno...
+  </body>
+</html>
