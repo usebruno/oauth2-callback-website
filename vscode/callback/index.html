@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bruno OAuth2 Redirect</title>
+    <script>
+      (function() {
+        var allParams = new URLSearchParams(window.location.search);
+
+        // Parse hash fragment params (implicit flow: #access_token=...&token_type=...)
+        if (window.location.hash) {
+          var hashParams = new URLSearchParams(window.location.hash.substring(1));
+          hashParams.forEach(function(value, key) {
+            allParams.set(key, value);
+          });
+        }
+
+        var queryString = allParams.toString();
+        var url = 'vscode://bruno-api-client.bruno/oauth2/callback';
+        url += queryString ? '?' + queryString : '';
+        window.open(url);
+      })();
+    </script>
+  </head>
+  <body>
+    Redirecting to Bruno (VS Code)...
+  </body>
+</html>
