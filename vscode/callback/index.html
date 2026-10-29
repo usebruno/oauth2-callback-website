@@ -14,14 +14,28 @@
           });
         }
 
-        var queryString = allParams.toString();
-        var url = 'vscode://bruno-api-client.bruno/oauth2/callback';
+        // Outside VS Code (Cursor, Windsurf, Insiders, ...) the extension prefixes state with
+        // "bruno.<uriScheme>."; no prefix means VS Code. State can be forged via a crafted link,
+        // so only known editor schemes are honoured; anything else falls back to vscode.
+        const ALLOWED_SCHEMES = ['vscode', 'vscode-insiders', 'cursor', 'windsurf'];
+        const STATE_PREFIX = 'bruno.';
+        let scheme = 'vscode';
+        const state = allParams.get('state') || '';
+        if (state.indexOf(STATE_PREFIX) === 0) {
+          const candidate = state.slice(STATE_PREFIX.length).split('.')[0];
+          if (ALLOWED_SCHEMES.indexOf(candidate) !== -1) {
+            scheme = candidate;
+          }
+        }
+
+        const queryString = allParams.toString();
+        const url = scheme + '://bruno-api-client.bruno/oauth2/callback';
         url += queryString ? '?' + queryString : '';
         window.open(url);
       })();
     </script>
   </head>
   <body>
-    Redirecting to Bruno (VS Code)...
+    Redirecting to Bruno...
   </body>
 </html>
